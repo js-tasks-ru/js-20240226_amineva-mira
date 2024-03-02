@@ -10,7 +10,7 @@ export function sortStrings(arr, param = 'asc') {
         sortedArray.sort((a,b)=> a.localeCompare(b, ['ru', 'en'], {caseFirst: 'upper'})) 
     }
     if(param === 'desc') {
-       sortedArray.sort((a,b) => b.localeCompare(a))
+       sortedArray.sort((a,b) => b.localeCompare(a, ['ru', 'en']))
     }
     return sortedArray;
 }

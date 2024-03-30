@@ -2,7 +2,12 @@ export default class SortableTable {
   constructor(headerConfig = [], data = []) {
     this.headerConfig = headerConfig;
     this.data = data;
-    this.element = this.createElement(this.createTemplate())
+    this.element = this.createElement(this.createTemplate());
+    this.subElements = {
+      header: this.element.querySelector['[data-element="header"]'],
+      body: this.element.querySelector['[data-element="body"]']
+    }
+    console.log(this.subElements)
   }
 
   createTemplate() {
@@ -35,7 +40,7 @@ export default class SortableTable {
       this.headerConfig.map(item => {
         if(item.id === 'title') {
           return (
-          `<div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}" data-order="asc">
+          `<div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}">
             <span>${item.title}</span>
             <span data-element="arrow" class="sortable-table__sort-arrow">
               <span class="sort-arrow"></span>
@@ -43,7 +48,7 @@ export default class SortableTable {
           </div>`)
         }
         return (
-        `<div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}" data-order="asc">
+        `<div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}">
           <span>${item.title}</span>
         </div>`)
       }).join('')
@@ -71,47 +76,42 @@ export default class SortableTable {
   }
 
   sort(fieldValue, orderValue) {
-    console.log(this.headerConfig)
-    let sortElement = this.headerConfig.findIndex(item => item.id === fieldValue)
-
-    if(sortElement.sortType === 'string') {
-      this.sortString(fieldValue, orderValue)
+    let sortIndex = this.headerConfig.findIndex(item => item.id === fieldValue)
+    if(this.headerConfig[sortIndex].sortType === 'string') {
+      this.sortString(fieldValue, orderValue, this.headerConfig[sortIndex])
     }
 
-    if(sortElement.sortType === 'number') {
-      this.sortNumber(fieldValue, orderValue)
+    if(this.headerConfig[sortIndex].sortType === 'number') {
+      this.sortNumber(fieldValue, orderValue, this.headerConfig[sortIndex])
     }
-    
-
     this.update()
-    console.log('click')
   }
 
-  sortString(fieldValue, orderValue) {
+  sortString(fieldValue, orderValue, sortElement) {
     this.data.sort((a, b) => {
       if(sortElement.sortable && orderValue === 'asc') {
-        a[fieldValue].localeCompare(b[fieldValue], ['ru', 'en'], {caseFirst: 'upper'})
+       return a[fieldValue].localeCompare(b[fieldValue], ['ru', 'en'], {caseFirst: 'upper'})
       }
       if(sortElement.sortable && orderValue === 'desc') {
-        b[fieldValue].localeCompare(a[fieldValue], ['ru', 'en'])
+        return b[fieldValue].localeCompare(a[fieldValue], ['ru', 'en'])
       }
     })
   }
 
-  sortNumber(fieldValue, orderValue) {
+  sortNumber(fieldValue, orderValue, sortElement) {
     this.data.sort((a, b) => {
       if(sortElement.sortable && orderValue === 'asc') {
-        a[fieldValue] - b[fieldValue];
+        return a[fieldValue] - b[fieldValue];
       }
       if(sortElement.sortable && orderValue === 'desc') {
-        b[fieldValue] - a[fieldValue];
+        return b[fieldValue] - a[fieldValue];
       }
     })
   }
 
 
   update() {
-    this.element.innerHTML = this.createBodyTemplate()
+    this.element.innerHTML = this.createTemplate()
   }
 
 

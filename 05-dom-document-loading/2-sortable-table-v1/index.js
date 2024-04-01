@@ -1,23 +1,31 @@
 export default class SortableTable {
+  // subElements={}
   constructor(headerConfig = [], data = []) {
     this.headerConfig = headerConfig;
     this.data = data;
     this.element = this.createElement(this.createTemplate());
     this.subElements = {
-      header: this.element.querySelector['[data-element="header"]'],
-      body: this.element.querySelector['[data-element="body"]']
+      header: document.querySelector['[data-element="header"]'],
+      body: document.querySelector['[data-element="body"]']
+    //   header: this.createHeaderTemplate(),
+    //   body: this.createBodyTemplate(this.data)
     }
+    // this.subElements.body=this.createBodyTemplate(this.data)
     console.log(this.subElements)
+    // console.log(this.subElements.body.firstElementChild)
+    // console.log(this.data)
+    // console.log('constructor',this.data)
+
   }
 
   createTemplate() {
     return (
       `<div class='sortable-table'>
         <div data-element="header" class='sortable-table__header sortable-table__row'>
-        ${this.createHeaderTemplate()}
+          ${this.createHeaderTemplate()}
         </div>
         <div data-element="body" class="sortable-table__body">
-        ${this.createBodyTemplate()}
+          ${this.createBodyTemplate()}
         </div>
         <div data-element="loading" class="loading-line sortable-table__loading-line"></div>
         <div data-element="emptyPlaceholder" class="sortable-table__empty-placeholder">
@@ -85,6 +93,7 @@ export default class SortableTable {
       this.sortNumber(fieldValue, orderValue, this.headerConfig[sortIndex])
     }
     this.update()
+    this.subElements.body.innerHTML=this.createBodyTemplate()
   }
 
   sortString(fieldValue, orderValue, sortElement) {
@@ -107,11 +116,14 @@ export default class SortableTable {
         return b[fieldValue] - a[fieldValue];
       }
     })
+    
   }
 
 
   update() {
+   
     this.element.innerHTML = this.createTemplate()
+   
   }
 
 

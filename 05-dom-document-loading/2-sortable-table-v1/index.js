@@ -1,21 +1,10 @@
 export default class SortableTable {
-  // subElements={}
+  subElements={}
   constructor(headerConfig = [], data = []) {
     this.headerConfig = headerConfig;
     this.data = data;
     this.element = this.createElement(this.createTemplate());
-    this.subElements = {
-      header: document.querySelector['[data-element="header"]'],
-      body: document.querySelector['[data-element="body"]']
-    //   header: this.createHeaderTemplate(),
-    //   body: this.createBodyTemplate(this.data)
-    }
-    // this.subElements.body=this.createBodyTemplate(this.data)
-    console.log(this.subElements)
-    // console.log(this.subElements.body.firstElementChild)
-    // console.log(this.data)
-    // console.log('constructor',this.data)
-
+    this.selectSubElements();
   }
 
   createTemplate() {
@@ -83,6 +72,12 @@ export default class SortableTable {
     `)
   }
 
+  selectSubElements() {
+    this.element.querySelectorAll('[data-element]').forEach(element => {
+      this.subElements[element.dataset.element] = element;
+    });
+  }
+
   sort(fieldValue, orderValue) {
     let sortIndex = this.headerConfig.findIndex(item => item.id === fieldValue)
     if(this.headerConfig[sortIndex].sortType === 'string') {
@@ -93,7 +88,6 @@ export default class SortableTable {
       this.sortNumber(fieldValue, orderValue, this.headerConfig[sortIndex])
     }
     this.update()
-    this.subElements.body.innerHTML=this.createBodyTemplate()
   }
 
   sortString(fieldValue, orderValue, sortElement) {
@@ -116,16 +110,11 @@ export default class SortableTable {
         return b[fieldValue] - a[fieldValue];
       }
     })
-    
   }
-
 
   update() {
-   
-    this.element.innerHTML = this.createTemplate()
-   
+   this.subElements.body.innerHTML=this.createBodyTemplate()
   }
-
 
   remove() {
     this.element.remove()

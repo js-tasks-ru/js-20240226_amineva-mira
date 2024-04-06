@@ -8,7 +8,6 @@ export default class SortableTable extends SortableTable1 {
   } = {}) {
     super(headersConfig, data);
     this.sorted = sorted;
-    console.log('here')
     this.createEventListner()
   }
 
@@ -21,12 +20,10 @@ export default class SortableTable extends SortableTable1 {
   // }
 
   createEventListner() {
-    console.log('here1')
     this.subElements.header.addEventListener('pointerdown', this.handelHeaderPointerDown)
   }
 
   handelHeaderPointerDown = (event) => {
-    console.log('here2')
     const elemColumnHeader = event.target.closest('[data-sortable="true"]')
     if(!elemColumnHeader) return;
 

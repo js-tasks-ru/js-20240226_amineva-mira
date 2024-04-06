@@ -25,11 +25,11 @@ class Tooltip {
   }
 
   tooltipListners() {
-    document.addEventListener('pointerover', (event) => this.handelDocumentPointerOver(event));
-    document.addEventListener('pointerout', (event) => this.handelDocumentPointerOut(event));
+    document.addEventListener('pointerover', this.handelDocumentPointerOver)
+    document.addEventListener('pointerout', this.handelDocumentPointerOut);
   }
 
-  handelDocumentPointerOver(event) {
+  handelDocumentPointerOver = (event) => {
     if(event.target.dataset.tooltip) {
       this.render(event.target.dataset.tooltip)
       this.element.style.top = event.pageY + 'px'
@@ -37,8 +37,10 @@ class Tooltip {
     }
   }
 
-  handelDocumentPointerOut(event) {
-    this.destroy()
+  handelDocumentPointerOut = (event) => {
+    if(event.target.dataset.tooltip) {
+      this.destroy()
+    }
   }
 
   destroy() {
@@ -47,8 +49,8 @@ class Tooltip {
 
   remove() {
     this.element.remove();
-    document.removeEventListener('pointerover', (event) => this.handelDocumentPointerOver(event));
-    document.removeEventListener('pointerout', (event) => this.handelDocumentPointerOut(event));
+    document.removeEventListener('pointerover', this.handelDocumentPointerOver)
+    document.removeEventListener('pointerout', this.handelDocumentPointerOut);
   }
 }
 

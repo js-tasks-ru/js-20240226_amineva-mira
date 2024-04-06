@@ -23,33 +23,33 @@ export default class SortableTable {
             <button type="button" class="button-primary-outline">Reset all filters</button>
           </div>
         </div>
-      </div>`)
+      </div>`);
   }
 
   createElement(template) {
-    const element = document.createElement('div')
+    const element = document.createElement('div');
     element.innerHTML = template;
-    return element.firstElementChild
+    return element.firstElementChild;
   }
 
   createHeaderTemplate() {
     return (
       this.headerConfig.map(item => {
-        if(item.id === 'title') {
+        if (item.id === 'title') {
           return (
-          `<div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}">
+            `<div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}">
             <span>${item.title}</span>
             <span data-element="arrow" class="sortable-table__sort-arrow">
               <span class="sort-arrow"></span>
             </span>
-          </div>`)
+          </div>`);
         }
         return (
-        `<div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}">
+          `<div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}">
           <span>${item.title}</span>
-        </div>`)
+        </div>`);
       }).join('')
-    )
+    );
   }
 
   createBodyTemplate() {
@@ -59,17 +59,17 @@ export default class SortableTable {
         <a href="!#" class="sortable-table__row">
           ${this.headerConfig.map(config => this.createBodyColumn(config, rowData)).join('')}
         </a>
-        `)})
-    ).join('')
+        `);})
+    ).join('');
   }
 
   createBodyColumn(config, rowData) {
-    if(config.template) {
-      return config.template(rowData)
+    if (config.template) {
+      return config.template(rowData);
     }
     return (`
     <div class="sortable-table__cell">${rowData[config.id]}</div>
-    `)
+    `);
   }
 
   selectSubElements() {
@@ -79,49 +79,49 @@ export default class SortableTable {
   }
 
   sort(fieldValue, orderValue) {
-    let sortIndex = this.headerConfig.findIndex(item => item.id === fieldValue)
-    if(this.headerConfig[sortIndex].sortType === 'string') {
-      this.sortString(fieldValue, orderValue, this.headerConfig[sortIndex])
+    let sortIndex = this.headerConfig.findIndex(item => item.id === fieldValue);
+    if (this.headerConfig[sortIndex].sortType === 'string') {
+      this.sortString(fieldValue, orderValue, this.headerConfig[sortIndex]);
     }
 
-    if(this.headerConfig[sortIndex].sortType === 'number') {
-      this.sortNumber(fieldValue, orderValue, this.headerConfig[sortIndex])
+    if (this.headerConfig[sortIndex].sortType === 'number') {
+      this.sortNumber(fieldValue, orderValue, this.headerConfig[sortIndex]);
     }
-    this.update()
+    this.update();
   }
 
   sortString(fieldValue, orderValue, sortElement) {
     this.data.sort((a, b) => {
-      if(sortElement.sortable && orderValue === 'asc') {
-       return a[fieldValue].localeCompare(b[fieldValue], ['ru', 'en'], {caseFirst: 'upper'})
+      if (sortElement.sortable && orderValue === 'asc') {
+        return a[fieldValue].localeCompare(b[fieldValue], ['ru', 'en'], {caseFirst: 'upper'});
       }
-      if(sortElement.sortable && orderValue === 'desc') {
-        return b[fieldValue].localeCompare(a[fieldValue], ['ru', 'en'])
+      if (sortElement.sortable && orderValue === 'desc') {
+        return b[fieldValue].localeCompare(a[fieldValue], ['ru', 'en']);
       }
-    })
+    });
   }
 
   sortNumber(fieldValue, orderValue, sortElement) {
     this.data.sort((a, b) => {
-      if(sortElement.sortable && orderValue === 'asc') {
+      if (sortElement.sortable && orderValue === 'asc') {
         return a[fieldValue] - b[fieldValue];
       }
-      if(sortElement.sortable && orderValue === 'desc') {
+      if (sortElement.sortable && orderValue === 'desc') {
         return b[fieldValue] - a[fieldValue];
       }
-    })
+    });
   }
 
   update() {
-   this.subElements.body.innerHTML=this.createBodyTemplate()
+    this.subElements.body.innerHTML = this.createBodyTemplate();
   }
 
   remove() {
-    this.element.remove()
+    this.element.remove();
   }
 
   destroy() {
-    this.remove()
+    this.remove();
   }
 }
 

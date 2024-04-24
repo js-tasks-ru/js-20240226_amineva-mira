@@ -1,6 +1,7 @@
 export default class ColumnChart {
     element;
     chartHeight = 50;
+    subElements = {}
 
     constructor({data = [], label = '', link = '', value = 0, formatHeading = value => value} = {}) {
       this.data = data;
@@ -9,6 +10,7 @@ export default class ColumnChart {
       this.value = value;
       this.formatHeading = formatHeading;
       this.element = this.createElement(this.createTemplate());
+      this.selectSubElements()
     }
 
     createTemplate() {
@@ -36,6 +38,12 @@ export default class ColumnChart {
     createChartClasses() {
       return this.data.length ? 'column-chart' : 'column-chart column-chart_loading';
     }
+
+    selectSubElements() {
+      this.element.querySelectorAll('[data-element]').forEach(element => {
+        this.subElements[element.dataset.element] = element;
+      });
+  }
 
     getColumnProps() {
       const maxValue = Math.max(...this.data);
